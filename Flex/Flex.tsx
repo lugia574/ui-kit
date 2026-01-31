@@ -1,8 +1,14 @@
-import React, { CSSProperties, ElementType, forwardRef } from 'react';
+import type { CSSProperties, ElementType } from 'react';
+import React, { forwardRef } from 'react';
+import classNames from 'classnames';
 import styles from './Flex.module.scss';
-import classNames from 'classnames'; // *선택사항: npm install classnames
 
-// CSS Variable을 위한 타입 확장
+// 유틸리티 import
+import type { SpacingSize } from '@/shared/types/css/SpacingSize';
+import { toCssUnit } from '@/shared/utils';
+import { toCssSpacing } from '@/shared/utils/css/toCssPadding';
+
+// CSS Variable 타입 확장
 interface CSSCustomProperties extends CSSProperties {
   '--flex-width'?: string | number;
   '--flex-height'?: string | number;
@@ -11,14 +17,13 @@ interface CSSCustomProperties extends CSSProperties {
   '--flex-align'?: string;
   '--flex-gap'?: string | number;
   '--flex-wrap'?: string;
+  '--flex-padding'?: string; // 추가됨
 }
 
 interface FlexProps extends React.HTMLAttributes<HTMLElement> {
-  // 렌더링할 HTML 태그 (기본: div)
   as?: ElementType;
   children?: React.ReactNode;
 
-  // Layout Props
   width?: string | number;
   height?: string | number;
   direction?: CSSProperties['flexDirection'];
@@ -26,13 +31,10 @@ interface FlexProps extends React.HTMLAttributes<HTMLElement> {
   align?: CSSProperties['alignItems'];
   gap?: string | number;
   wrap?: CSSProperties['flexWrap'];
-}
 
-// 숫자면 px 붙이고, 문자면 그대로 반환하는 간단한 내부 유틸
-const toCssValue = (value?: string | number) => {
-  if (value === undefined) return undefined;
-  return typeof value === 'number' ? `${value}px` : value;
-};
+  // padding prop 추가 (숫자, 문자열, 혹은 객체)
+  padding?: SpacingSize | number | string;
+}
 
 const Flex = forwardRef<HTMLElement, FlexProps>(
   (
@@ -47,34 +49,40 @@ const Flex = forwardRef<HTMLElement, FlexProps>(
       align,
       gap,
       wrap,
+      padding, // destructuring
       style,
       ...props
     },
-    ref,
+    ref
   ) => {
-    // Props를 CSS Variables로 매핑
     const cssVariables: CSSCustomProperties = {
-      '--flex-width': toCssValue(width),
-      '--flex-height': toCssValue(height),
+      '--flex-width': toCssUnit(width || 'auto'), // width/height도 toCssUnit 활용 추천
+      '--flex-height': toCssUnit(height || 'auto'),
       '--flex-direction': direction,
       '--flex-justify': justify,
       '--flex-align': align,
-      '--flex-gap': toCssValue(gap),
+      '--flex-gap': toCssUnit(gap || 0),
       '--flex-wrap': wrap,
-      ...style, // 사용자가 직접 넣은 style도 병합
+
+      // Padding 계산 로직 적용
+      '--flex-padding': toCssSpacing(padding),
+
+      ...style,
     };
 
     return (
-      <div
+      <Component
         ref={ref}
-        className={`${styles.Flex} ${className || ''}`.trim()}
+        className={classNames(styles.Flex, className)}
         style={cssVariables as CSSProperties}
         {...props}
       >
         {children}
-      </div>
+      </Component>
     );
-  },
+  }
 );
+
+Flex.displayName = 'Flex';
 
 export default Flex;
