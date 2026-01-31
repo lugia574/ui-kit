@@ -1,0 +1,124 @@
+// Button.module.scss
+
+.Button {
+  // [1] Layout (Native Flexbox)
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--btn-gap, 6px); // 아이콘과 텍스트 간격
+
+  // [2] Base Styles
+  appearance: none;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid transparent; // 테두리 공간 확보
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+
+  // Font defaults
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+
+  // [3] CSS Variables Defaults
+  --btn-main-color: #007aff; // 메인 브랜드 컬러
+  --btn-contrast-text: #fff; // 배경이 진할 때 글자색
+  --btn-radius: 6px; // 모서리 둥글기
+
+  // Padding & Font Size (Size prop에 의해 변경됨)
+  padding: var(--btn-padding, 0 16px);
+  height: var(--btn-height, 40px);
+  font-size: var(--btn-font-size, 15px);
+  border-radius: var(--btn-radius);
+  width: var(--btn-width, auto); // fullWidth 지원용
+
+  // Animation
+  transition: all 0.2s ease-in-out;
+
+  // --- [Variants] ---
+
+  // 1. Filled (꽉 찬 버튼)
+  &[data-variant='filled'] {
+    background-color: var(--btn-main-color);
+    color: var(--btn-contrast-text);
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9); // 살짝 어둡게
+    }
+    &:active:not(:disabled) {
+      filter: brightness(0.85);
+    }
+  }
+
+  // 2. Outlined (테두리 버튼)
+  &[data-variant='outlined'] {
+    background-color: transparent;
+    color: var(--btn-main-color);
+    border-color: var(--btn-main-color);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    &:active:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  // 3. Ghost (텍스트 버튼)
+  &[data-variant='ghost'] {
+    background-color: transparent;
+    color: var(--btn-main-color);
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  // --- [Sizes] ---
+  // 크기별 프리셋 (변수 재할당)
+  &[data-size='sm'] {
+    --btn-height: 32px;
+    --btn-font-size: 13px;
+    --btn-padding: 0 12px;
+  }
+
+  &[data-size='md'] {
+    // Default values
+    --btn-height: 40px;
+    --btn-font-size: 15px;
+    --btn-padding: 0 16px;
+  }
+
+  &[data-size='lg'] {
+    --btn-height: 48px;
+    --btn-font-size: 17px;
+    --btn-padding: 0 24px;
+  }
+
+  // --- [States] ---
+
+  // Disabled
+  &:disabled,
+  &[data-loading='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Focus (접근성)
+  &:focus-visible {
+    box-shadow:
+      0 0 0 2px #fff,
+      0 0 0 4px var(--btn-main-color);
+  }
+
+  // 내부 아이콘 정렬 보정
+  .Icon {
+    display: flex;
+    align-items: center;
+  }
+}
