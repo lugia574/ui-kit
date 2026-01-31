@@ -1,0 +1,123 @@
+// Input.module.scss
+
+// 1. 전체 컨테이너 (Label + Input + HelperText)
+.InputRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; // Label과 Input 사이 간격
+
+  width: var(--input-width, 100%);
+  box-sizing: border-box;
+
+  // CSS Variables Defaults
+  --input-border-color: #ddd;
+  --input-focus-color: #007aff;
+  --input-error-color: #ff4d4f;
+  --input-bg: #fff;
+  --input-radius: 6px;
+  --input-height: 40px;
+  --input-padding: 0 12px;
+  --input-font-size: 15px;
+  --input-placeholder-color: #aaa;
+  --input-text-color: #333;
+}
+
+// 2. 레이블
+.Label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+// 3. 인풋을 감싸는 박스 (Border 담당)
+.InputWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  width: 100%;
+  height: var(--input-height);
+  padding: var(--input-padding);
+
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-radius);
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  cursor: text; // 박스 클릭해도 텍스트 입력 느낌 나게
+
+  // Focus 상태 (내부 input이 포커스되면 이 박스가 변함)
+  &:focus-within {
+    border-color: var(--input-focus-color);
+    box-shadow: 0 0 0 1px var(--input-focus-color); // 외곽선 강조
+  }
+
+  // Error 상태
+  &[data-status='error'] {
+    --input-border-color: var(--input-error-color);
+    --input-focus-color: var(--input-error-color); // 포커스 색도 빨강으로
+  }
+
+  // Disabled 상태
+  &[data-disabled='true'] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+// 4. 실제 Native Input
+.NativeInput {
+  flex: 1; // 남은 공간 다 차지
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  width: 100%;
+  height: 100%;
+
+  font-size: var(--input-font-size);
+  color: var(--input-text-color);
+  font-family: inherit;
+
+  &::placeholder {
+    color: var(--input-placeholder-color);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// 5. 앞뒤 아이콘 (Prefix/Suffix)
+.Prefix,
+.Suffix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 1.2em; // 텍스트보다 살짝 크게
+  flex-shrink: 0; // 공간 부족해도 줄어들지 않음
+}
+
+.Prefix {
+  margin-right: 8px;
+}
+.Suffix {
+  margin-left: 8px;
+}
+
+// 6. 하단 헬퍼 텍스트
+.HelperText {
+  font-size: 13px;
+  color: #888;
+  margin-left: 2px;
+
+  &[data-status='error'] {
+    color: var(--input-error-color);
+  }
+}
