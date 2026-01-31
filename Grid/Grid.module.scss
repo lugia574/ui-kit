@@ -1,0 +1,32 @@
+// Grid.module.scss
+
+.Grid {
+  display: grid;
+  box-sizing: border-box;
+
+  // [1] Grid Layout Props
+  // columns가 없으면 기본 1열
+  grid-template-columns: var(--grid-columns, 1fr);
+  grid-template-rows: var(--grid-rows, auto);
+
+  // gap
+  gap: var(--grid-gap, 0);
+
+  // flow (row | column | dense...)
+  grid-auto-flow: var(--grid-flow, row);
+
+  // [2] Alignment (Container 내 아이템 배치)
+  align-items: var(--grid-align, stretch); // 수직 정렬 (stretch가 기본)
+  justify-items: var(--grid-justify, stretch); // 수평 정렬
+
+  // [3] Content Alignment (Grid 트랙 자체의 정렬)
+  align-content: var(--grid-align-content, start);
+  justify-content: var(--grid-justify-content, start);
+
+  // [4] Common Styles
+  width: var(--grid-width, 100%);
+  height: var(--grid-height, auto);
+  padding: var(--grid-padding, 0);
+
+  min-width: 0; // Grid 자식 요소 overflow 방지
+}
