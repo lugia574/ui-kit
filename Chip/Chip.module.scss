@@ -1,0 +1,90 @@
+// Chip.module.scss
+
+.Chip {
+  // [1] 의존성 제거: Flex 컴포넌트 대신 직접 Flexbox 선언
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // 요소 간 간격 (아이콘 <-> 텍스트)
+  gap: var(--chip-gap, 6px);
+
+  // 기본 스타일
+  box-sizing: border-box;
+  vertical-align: middle;
+  border: 1px solid transparent; // 테두리 공간 확보
+  cursor: pointer;
+  white-space: nowrap; // 텍스트 줄바꿈 방지
+
+  // 폰트 설정
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+
+  // [2] CSS Variables (테마 및 Props 매핑)
+  // 기본 색상 팔레트
+  --chip-primary-color: #555; // 텍스트, 보더 색
+  --chip-bg-color: #f0f0f0; // 배경 색
+  --chip-radius: 999px; // 둥근 정도
+
+  // Props에서 주입될 값들
+  padding: var(--chip-padding, 6px 12px);
+  border-radius: var(--chip-radius);
+
+  // 애니메이션
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+
+  // --- [Variants] ---
+
+  // Filled 타입 (배경색 있음)
+  &[data-variant='filled'] {
+    background-color: var(--chip-bg-color);
+    color: var(--chip-primary-color);
+    border-color: transparent;
+
+    &:hover:not([data-disabled='true']) {
+      filter: brightness(0.95);
+    }
+  }
+
+  // Outlined 타입 (테두리만)
+  &[data-variant='outlined'] {
+    background-color: transparent;
+    color: var(--chip-primary-color);
+    border-color: var(--chip-primary-color);
+
+    &:hover:not([data-disabled='true']) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  // --- [States] ---
+
+  // Selected (선택됨)
+  &[data-selected='true'] {
+    // 선택 시 강조 색상으로 변수 오버라이딩
+    --chip-primary-color: #ffffff;
+    --chip-bg-color: #007aff; // Brand Color
+
+    background-color: var(--chip-bg-color);
+    color: var(--chip-primary-color);
+    border-color: transparent;
+  }
+
+  // Disabled (비활성화)
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // 내부 아이콘 스타일 보정
+  .Icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
