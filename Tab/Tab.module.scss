@@ -1,0 +1,90 @@
+// Tab.module.scss
+
+// 1. Root Container
+.Root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  // CSS Variables Defaults
+  --tab-active-color: #007aff;
+  --tab-border-color: #eee;
+  --tab-text-color: #666;
+  --tab-text-active: #111;
+}
+
+// 2. Tab List (버튼들이 놓이는 줄)
+.List {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 2px solid var(--tab-border-color);
+  margin-bottom: 16px;
+  gap: 16px; // 탭 사이 간격
+}
+
+// 3. Tab Trigger (버튼)
+.Trigger {
+  all: unset; // button 기본 스타일 제거
+  cursor: pointer;
+
+  position: relative;
+  padding: 12px 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--tab-text-color);
+  transition: color 0.2s;
+
+  // Active Line을 위한 가상요소 (애니메이션 효과 가능)
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; // List의 border를 덮기 위해 아래로
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+  }
+
+  // Hover
+  &:hover:not(:disabled) {
+    color: var(--tab-text-active);
+  }
+
+  // Active State
+  &[data-state='active'] {
+    color: var(--tab-active-color);
+    font-weight: 600;
+
+    &::after {
+      background-color: var(--tab-active-color);
+    }
+  }
+
+  // Disabled State
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 4. Content Panel
+.Content {
+  animation: fadeIn 0.3s ease-in-out;
+
+  // keepMounted 사용 시 hidden 속성 대응
+  &[hidden] {
+    display: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
